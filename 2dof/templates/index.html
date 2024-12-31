@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2DOF Controller</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        #joystick-status {
+            font-size: 2em;
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>2DOF Motion Controller</h1>
+    <p>Control the servos using your gaming controller. Status will update below:</p>
+    <div id="joystick-status">Waiting for input...</div>
+
+    <script>
+        async function fetchStatus() {
+            try {
+                const response = await fetch('/status');
+                if (!response.ok) {
+                    console.error("Error fetching status:", response.statusText);
+                    return;
+                }
+                const data = await response.json();
+                document.getElementById('joystick-status').textContent = data.status;
+            } catch (error) {
+                console.error("Error fetching status:", error);
+            }
+        }
+
+        // Poll the backend every 200ms to update the status
+        setInterval(fetchStatus, 200);
+    </script>
+</body>
+</html>
